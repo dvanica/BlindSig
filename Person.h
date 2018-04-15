@@ -17,9 +17,10 @@ class Person
   public:
     Person();
     Person(RSA rsa);
-    void shareModulusWith(Person shareTo);
-    void sharePublicKeyWith(Person shareTo);
+    void shareModulusWith(Person * shareTo);
+    void sharePublicKeyWith(Person * shareTo);
     BigInt getModulus();
+    void setN(BigInt B);
     /**
      * Generate random number
      * Generate inverse w/respect to modulus

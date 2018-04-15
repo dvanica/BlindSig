@@ -16,27 +16,32 @@ Person::Person(RSA rsa)
     Person::rsa = rsa;
 }
 
-BigInt Person::getModulus() {
-    return rsa.getModulus();
+BigInt Person::getModulus()
+{
+    return Person::rsa.getModulus();
 }
 
-void Person::shareModulusWith(Person shareTo)
+void Person::setN(BigInt B)
 {
-    std::cout << "Old modulus: " << shareTo.rsa.getModulus().toHexString() << "and " << Person::rsa.getModulus().toHexString() << std::endl;
-    shareTo.rsa.setN(Person::rsa.getModulus());
-    std::cout << "New modulus: " << shareTo.rsa.getModulus().toHexString() << std::endl;
+    Person::rsa.setN(B);
 }
 
-void Person::sharePublicKeyWith(Person shareTo)
+void Person::shareModulusWith(Person * shareTo)
 {
-    std::cout << "Old Public Key: " << shareTo.rsa.getPublicKey().toHexString() << std::endl;
-    shareTo.rsa.setPublicKey(Person::rsa.getPublicKey());
-    std::cout << "New Public Key: " << shareTo.rsa.getPublicKey().toHexString() << std::endl;
+    std::cout << "Old modulus: " << shareTo->getModulus().toHexString() << "and " << Person::rsa.getModulus().toHexString() << std::endl;
+    shareTo->setN(rsa.getModulus());
+    std::cout << "New modulus: " << shareTo->getModulus().toHexString() << std::endl;
+}
+
+void Person::sharePublicKeyWith(Person * shareTo)
+{
+    std::cout << "Old Public Key: " << shareTo->rsa.getPublicKey().toHexString() << std::endl;
+    shareTo->rsa.setPublicKey(Person::rsa.getPublicKey());
+    std::cout << "New Public Key: " << shareTo->rsa.getPublicKey().toHexString() << std::endl;
 }
 
 BigInt Person::blindAndEncrypt(BigInt message)
 {
-
     Person::randomNumber = int(((double)std::rand() / RAND_MAX) * RAND_LIMIT16);
     //randomNumber * inverse = 1 mod getModulus()
     Person::inverse = modInverse(Person::randomNumber, Person::rsa.getModulus());
@@ -49,7 +54,6 @@ BigInt Person::blindAndEncrypt(BigInt message)
 BigInt Person::signMessage(BigInt message)
 {
     return Person::rsa.decrypt(message);
-    ;
 }
 
 BigInt Person::verifyMessage(BigInt message)
