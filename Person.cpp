@@ -28,7 +28,7 @@ void Person::setN(BigInt B)
 
 void Person::shareModulusWith(Person * shareTo)
 {
-    std::cout << "Old modulus: " << shareTo->getModulus().toHexString() << "and " << Person::rsa.getModulus().toHexString() << std::endl;
+    std::cout << "Old modulus: " << shareTo->getModulus().toHexString() << std::endl;
     shareTo->setN(rsa.getModulus());
     std::cout << "New modulus: " << shareTo->getModulus().toHexString() << std::endl;
 }
@@ -43,8 +43,11 @@ void Person::sharePublicKeyWith(Person * shareTo)
 BigInt Person::blindAndEncrypt(BigInt message)
 {
     Person::randomNumber = int(((double)std::rand() / RAND_MAX) * RAND_LIMIT16);
+    std::cout << "Random number: " << randomNumber.toHexString() << std::endl;
     //randomNumber * inverse = 1 mod getModulus()
     Person::inverse = modInverse(Person::randomNumber, Person::rsa.getModulus());
+    std::cout << "Inverse of random number: " << inverse.toHexString() << std::endl;
+    std::cout << "Check random and inverse satisfy rand*inverse=1 mod N ::" << ((randomNumber*inverse)%Person::rsa.getModulus()).toHexString() << std::endl;
     Person::encryptedRand = Person::rsa.encrypt(Person::randomNumber);
 
     BigInt returnValue = (Person::encryptedRand * message) % Person::rsa.getModulus();

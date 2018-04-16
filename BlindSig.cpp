@@ -27,18 +27,18 @@ int main(int argc, char *argv[])
     BigInt message(distribution(generator));
     
     message = message % alice.getModulus();
-    std::cout << "Alice's Message to be Signed: " << message.toHexString() << std::endl;
+    std::cout << "Alice has generated a message to be Signed: " << message.toHexString() << std::endl;
     BigInt blindedMessage = alice.blindAndEncrypt(message);
-    std::cout << "Alice sends Bob the blinded message:: " << blindedMessage.toHexString() << std::endl;
+    std::cout << "Alice blinds the message and sends to Bob: " << blindedMessage.toHexString() << std::endl;
 
     BigInt signedBlindedMessage = bob.signMessage(blindedMessage);
-    std::cout << "Bob's signed blinded message: " << signedBlindedMessage.toHexString() << std::endl;
+    std::cout << "Bob signs the blinded message: " << signedBlindedMessage.toHexString() << std::endl;
 
     BigInt signedMessage = alice.unblindSignedMessage(signedBlindedMessage);
-    std::cout << "Final message signed by Bob: " << signedMessage.toHexString() << std::endl;
+    std::cout << "Alice unblinds the signed message from Bob to get the final message signed by Bob: " << signedMessage.toHexString() << std::endl;
  
     BigInt verifiedMessage = alice.verifyMessage(signedMessage);
-    std::cout << "Verified message: " << verifiedMessage.toHexString() << std::endl;
+    std::cout << "Anyone can verify the message using Bob's public key: " << verifiedMessage.toHexString() << std::endl;
 }
 
 /*
